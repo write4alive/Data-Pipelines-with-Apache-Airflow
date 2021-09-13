@@ -19,17 +19,26 @@ class DataQualityOperator(BaseOperator):
         self.redshift_conn_id = redshift_conn_id
 
     def execute(self, context):
+        self.log.info('Connection Redshift')
         redshift = PostgresHook(self.redshift_conn_id)
         cnt_err  = 0
         
         for check_step in self.data_quality_checks:
+            
             check_query     = check_step.get('data_check_sql')
             expected_result = check_step.get('expected_value')
-  
+            
             result = redshift.get_records(check_query)[0]
+            
+            self.log.info(f"Running query   : {check_query}")
+            self.log.info(f"Expected result : {expected_result}")
+            self.log.info(f"Check result    : {result}")
+            
             
             if result[0] != expected_result
                 cnt_err += 1
+                self.log.info(f"Data quality check fails At   : {check_query}")
+                
             
         if cnt_err > 0:
             self.log.info('Data quality checks - Failed !')
