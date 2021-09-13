@@ -13,7 +13,6 @@ class DataQualityOperator(BaseOperator):
                  *args, **kwargs):
 
         super(DataQualityOperator, self).__init__(*args, **kwargs)
-        # Map params here
         self.data_quality_checks = data_quality_checks
         self.redshift_conn_id = redshift_conn_id
 
