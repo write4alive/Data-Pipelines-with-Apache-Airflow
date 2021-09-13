@@ -25,8 +25,7 @@ class DataQualityOperator(BaseOperator):
         for check_step in self.data_quality_checks:
             check_query     = check_step.get('data_check_sql')
             expected_result = check_step.get('expected_value')
-            comparison_opt  = check_step.get('comparison')
-            
+  
             result = redshift.get_records(check_query)[0]
             
             if result[0] != expected_result
