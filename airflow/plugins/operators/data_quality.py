@@ -8,7 +8,6 @@ class DataQualityOperator(BaseOperator):
 
     @apply_defaults
     def __init__(self,
-                 # Define your operators params (with defaults) here
                  data_quality_checks = [],
                  redshift_conn_id = "",
                  *args, **kwargs):
@@ -44,5 +43,3 @@ class DataQualityOperator(BaseOperator):
             self.log.info('Data quality checks - Failed !')
         else:
             self.log.info('Data quality checks - Passed !')
-  
-        self.log.info('Data quality checking operations completed...')
