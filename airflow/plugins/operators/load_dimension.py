@@ -10,6 +10,9 @@ class LoadDimensionOperator(BaseOperator):
         insert into {}
         {};
     """
+    truncate_sql = """
+        TRUNCATE TABLE {};
+    """
 
     @apply_defaults
     def __init__(self,
@@ -24,10 +27,13 @@ class LoadDimensionOperator(BaseOperator):
         self.redshift_conn_id = redshift_conn_id
         self.table = table
         self.sql = sql
-        
 
     def execute(self, context):
         redshift = PostgresHook(postgres_conn_id = self.redshift_conn_id)
+        
+        self.log.info(f"Truncating dimension table: {self.table}")
+        redshift.run(LoadDimensionOperator.truncate_sql.format(self.table))
+        
         load_sql = LoadDimensionOperator.insert_sql.format(
             self.table,
             self.sql
