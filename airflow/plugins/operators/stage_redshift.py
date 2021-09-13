@@ -25,7 +25,7 @@ class StageToRedshiftOperator(BaseOperator):
                  s3_bucket= "",
                  s3_key = "",
                  extra_param="",
-                 region=""
+                 region="",
                  *args, **kwargs):
 
         super(StageToRedshiftOperator, self).__init__(*args, **kwargs)

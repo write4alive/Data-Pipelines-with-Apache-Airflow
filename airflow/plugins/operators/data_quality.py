@@ -10,7 +10,7 @@ class DataQualityOperator(BaseOperator):
     def __init__(self,
                  # Define your operators params (with defaults) here
                  data_quality_checks = [],
-                 redshift_conn_id = ""
+                 redshift_conn_id = "",
                  *args, **kwargs):
 
         super(DataQualityOperator, self).__init__(*args, **kwargs)
@@ -35,7 +35,7 @@ class DataQualityOperator(BaseOperator):
             self.log.info(f"Check result    : {result}")
             
             
-            if result[0] != expected_result
+            if result[0] != expected_result:
                 cnt_err += 1
                 self.log.info(f"Data quality check fails At   : {check_query}")
                 
