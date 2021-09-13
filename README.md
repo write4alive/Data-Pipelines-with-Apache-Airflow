@@ -71,7 +71,6 @@ The operators folder with operator templates<br>
 A helper class for the SQL transformations<br>
 With these template files, you should be able see the new DAG in the Airflow UI. The graph view should look like this:<br>
 
-Going to upload last image soon , I added create tables as dag dependencies and not shown here yet.<br>
 <img width="851" alt="screenshot-2019-01-21-at-20 55 39" src="https://user-images.githubusercontent.com/16669517/133000249-1e32fe9e-2b61-435d-b976-eecc5725b8a3.png">
 
 
