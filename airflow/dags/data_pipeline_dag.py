@@ -26,14 +26,6 @@ dag = DAG('data_pipeline_dag',
 
 start_operator = DummyOperator(task_id = 'Begin_execution',  dag = dag)
 
-# We are creating all tables with using PostgresOperator based on create_tables.sql but you can create these tables with using queries on Web UI aws query editor
-create_tables = PostgresOperator(
-    task_id = 'Create_tables',
-    dag = dag,
-    postgres_conn_id = 'redshift',
-    sql = 'create_tables.sql'
-)
-
 stage_events_to_redshift = StageToRedshiftOperator(
     task_id = 'Stage_events',
     dag = dag,
@@ -104,11 +96,11 @@ run_quality_checks = DataQualityOperator(
     dag = dag,
     redshift_conn_id = 'redshift',
     data_quality_checks = [
-        {'data_check_sql': 'select count(*) from public.songs where title is null', 'expected_value': 0 },
-        {'data_check_sql': 'select count(*) from public.artists where name is null', 'expected_value': 0 },
-        {'data_check_sql': 'select count(*) from public.users where first_name is null', 'expected_value': 0 },
-        {'data_check_sql': 'select count(*) from public.time where month is null', 'expected_value': 0 },
-        {'data_check_sql': 'select count(*) from public.songsplay where userid is null', 'expected_value': 0 }
+        {'data_check_sql': 'select count(*) from public.songs where title is null', 'expected_value': 0      ,'comaprison':'='},
+        {'data_check_sql': 'select count(*) from public.artists where name is null', 'expected_value': 0     ,'comaprison':'=' },
+        {'data_check_sql': 'select count(*) from public.users where first_name is null', 'expected_value': 0 ,'comaprison':'='},
+        {'data_check_sql': 'select count(*) from public.time where month is null', 'expected_value': 0       ,'comaprison':'='},
+        {'data_check_sql': 'select count(*) from public.songsplay where userid is null', 'expected_value': 0 ,'comaprison':'=' }
     ]
 )
 
@@ -117,10 +109,8 @@ end_operator = DummyOperator(task_id = 'Stop_execution',  dag = dag)
 
 # DAG Task Dependency
 
-start_operator >> create_tables
-
-create_tables  >> stage_events_to_redshift
-create_tables  >> stage_songs_to_redshift
+start_operator  >> stage_events_to_redshift
+start_operator  >> stage_songs_to_redshift
 
 stage_events_to_redshift >> load_songplays_table 
 stage_songs_to_redshift  >> load_songplays_table
